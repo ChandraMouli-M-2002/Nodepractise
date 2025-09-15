@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Books</title>
+</head>
+<body>
+    <h1>Books</h1>
+    <% if (Books.length == 0) { %>
+      <p>No Books Available</p>
+    <% }else{ %>
+       <table>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Book Name</td>
+                    <td>ISBN</td>
+                    <td>Author</td>
+                    <td>Price</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% Books.forEach((book,index) => { %>
+                  <tr>
+                    <td> <%= index + 1 %> </td>
+                    <td> <a href="/books/<%= book.id %>"> <%= book.bookName %> </a> </td>
+                    <td> <%= book.isbn %> </td>
+                    <td> <%= book.authoName %> </td>
+                    <td> <%= book.price %> </td>
+                    <td> <button onClick="deleteBookById('<%= book.id %>')">Delete Book</button> </td>
+                  </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <%}%>
+        <script>
+            async function deleteBookById(id){
+                await fetch(`/books /${id}`,{method:'DELETE'});
+                window.location.reload();
+            }
+        </script>
+    </body>
+    </html>
