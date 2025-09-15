@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/css/bootstrap') %>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <%- include('./partials/components/nav') %>
+    <div class="container mt-5">
+        <h1 class="my-4">Login</h1>
+      <form class="row g-3 " method="post" action="/user/login">
+        <div class="col-md-12">
+          <label for="inputEmail4" class="form-label">Email</label>
+          <input name="email" type="email" class="form-control" id="inputEmail4" />
+        </div>
+        <div class="col-md-12">
+          <label for="inputPassword4" class="form-label">Password</label>
+          <input name="password" type="password" class="form-control" id="inputPassword4" />
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+      </form>
+      <h3 class="my-2 ">Or</h3>
+      <a href="/signup">Create a new account</a>
+    </div>
+    <%- include('./partials/js/bootstrap') %>
+  </body>
+</html>
