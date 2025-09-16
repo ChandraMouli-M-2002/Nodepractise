@@ -1,0 +1,146 @@
+🔹 What does parse mean in English?
+
+Parse = to read, break down, and convert data into a format that the program can understand.
+
+In programming, raw data usually comes as text (string), and parsing means turning it into a structured format (like an object or array).
+
+👉 Example (English):
+
+Raw request body:
+     
+    email=mouli%40gmail.com&password=1234
+
+
+After parsing:
+
+      { email: "mouli@gmail.com", password: "1234" }
+
+
+So parsing = translating raw data into usable data.
+
+
+
+
+
+ 🔹 1. bodyParser.json()
+
+ * Parses JSON request bodies (like when you send data with fetch or Axios)
+
+Example:
+
+POST /user/login
+Content-Type: application/json
+
+{ "email": "mouli@gmail.com", "password": "1234" }
+
+* Without this middleware: req.body would be undefined.
+* With it:
+
+  req.body = { email: "mouli@gmail.com", password: "1234" }
+
+
+
+🔹 2. bodyParser.urlencoded({ extended: false })
+
+Parses form submissions (application/x-www-form-urlencoded).
+
+Example (HTML form):
+
+<form method="POST" action="/user/login">
+  <input name="email" value="mouli@gmail.com">
+  <input name="password" value="1234">
+  <button type="submit">Login</button>
+</form>
+
+* Browser sends:
+
+email=mouli%40gmail.com&password=1234
+
+* Middleware parses it into:
+
+req.body = { email: "mouli@gmail.com", password: "1234" }
+
+So together, bodyParser.json() and bodyParser.urlencoded() let your app handle API requests + form requests.
+
+
+
+🔹 3. express.static(path.resolve('./public'))
+
+Serves static files (CSS, JS, images) from the public folder.
+
+Example:
+
+You put public/style.css
+
+Visiting http://localhost:8000/style.css → Express sends that file directly.
+
+Useful for frontend assets.
+
+
+
+
+🔹 4. cookieParser()
+
+app.use(cookieParser());
+// When a request comes into your server, it may contain cookies in the HTTP header:
+
+//By default, Express does not parse cookies.
+//If you try req.cookies without cookie-parser, it will be undefined.
+
+// With cookieParser() middleware:
+// It runs on every request (because you used app.use).
+// It parses the raw cookie string.
+// It attaches the parsed cookies as a nice object to the request:
+// req.cookies = {
+//   Token: "abcd123",
+//   theme: "dark"
+// }
+
+
+🔹 5. CheckForToken (your custom middleware)
+
+Runs after cookieParser().
+
+Purpose: check if a cookie named Token exists.
+
+If found:
+
+Verifies the JWT.
+
+Attaches decoded user info to req.user.
+
+If not found or invalid:
+
+Simply calls next() (doesn’t block).
+
+So now inside your routes, you can do:
+
+if (req.user) {
+  console.log("Logged-in user:", req.user);
+}
+
+
+🔹 Middleware Order (very important 🚦)
+
+In Express, order matters. For your app:
+
+JSON body parsed
+
+Form body parsed
+
+Static files served
+
+Cookies parsed
+
+Token checked
+
+Routes executed (/, /user, /blog)
+
+That’s why cookieParser() is before CheckForToken → otherwise, req.cookies would be undefined.
+
+
+Middleware is a function in Express that sits between the request and the response.
+It can look at the request, modify it, stop it, or pass it to the next function using next().
+
+👉 Example to say in interview:
+“In Express, app.use(express.json()) is a middleware. It reads the raw request body and converts it into a JSON object so that we can use req.body directly.”

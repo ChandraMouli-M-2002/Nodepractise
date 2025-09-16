@@ -7,14 +7,20 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link active"  href="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Create Blog</a>
+        <% if (locals.user) { %>
+           <li class="nav-item">
+          <a class="nav-link" href="blog">Create Blog</a>
         </li>
-        <li class="nav-item">
+         <li class="nav-item">
+          <a class="nav-link" href="#"><%= user.userName %></a>
+        </li>
+        <% } else { %>
+           <li class="nav-item">
           <a class="nav-link" href="/login">Login</a>
         </li>
+        <% } %> 
       </ul>
     </div>
   </div>

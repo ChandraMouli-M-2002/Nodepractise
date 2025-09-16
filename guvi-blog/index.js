@@ -2,15 +2,21 @@ const express=require('express');
 const bodyParser=require('body-parser')
 const path=require('path');
 const mongoose=require('mongoose');
-
-const app = express();
-mongoose.connect('mongodb://localhost/GuviBlogs')
-.then(()=> console.log('DB Connected Successfully'))
-.catch((err)=> console.log('MongoDB connection Error',err));
+var cookieParser = require('cookie-parser')
 
 const userRouter= require('./routers/userRoutes');
 const blogRouter= require('./routers/blogRoutes');
 const staticRouter= require('./routers/staticRouter');
+
+const {CheckForToken}=require('./middlewares/auth');
+
+const app = express();
+
+//db connect
+mongoose.connect('mongodb://localhost/GuviBlogs')
+.then(()=> console.log('DB Connected Successfully'))
+.catch((err)=> console.log('MongoDB connection Error',err));
+
 
 //Configrations
 app.set('view engine','ejs');
@@ -20,6 +26,8 @@ app.set('views',path.resolve('./views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.resolve('./public')));
+app.use(cookieParser());
+app.use(CheckForToken);
 
 //Register Routes
 app.use('/',staticRouter);  
