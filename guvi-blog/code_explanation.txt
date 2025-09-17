@@ -144,3 +144,45 @@ It can look at the request, modify it, stop it, or pass it to the next function 
 
 👉 Example to say in interview:
 “In Express, app.use(express.json()) is a middleware. It reads the raw request body and converts it into a JSON object so that we can use req.body directly.”
+
+
+
+🔹 How file upload works (browser → server)
+
+In HTML a file input looks like:
+
+<form action="/create" method="POST" enctype="multipart/form-data">
+  <input type="text" name="title" />
+  <input type="file" name="coverimage" accept="image/*" />
+  <button type="submit">Upload</button>
+</form>
+
+
+enctype="multipart/form-data" is mandatory when sending files. It tells the browser to package the form as multiple parts (fields + files) rather than URL-encoding the whole body.
+
+🔹What multipart/form-data actually is
+
+The HTTP request body is split into parts separated by a boundary string. Each part has its own headers (e.g., Content-Disposition, Content-Type) and body.
+
+*Why this is necessary: URL encoding (application/x-www-form-urlencoded) is textual and cannot carry raw binary safely/efficiently and it treats the whole body as a single encoded string. multipart/form-data keeps file binary data as separate parts.
+
+🔹Why body-parser / express.json() won’t parse file uploads
+
+* body-parser (and express.json() / express.urlencoded()) parse application/json or application/x-www-form-urlencoded. They do not parse multipart streams.
+
+* Multipart is streamed: it contains file binary parts that must be parsed part-by-part. So you need a multipart parser middleware (multer, busboy, formidable, multiparty, etc.).
+
+🔹What Multer does (high level)
+
+Multer is Express middleware that parses multipart/form-data requests.
+
+It reads the incoming request stream, recognizes parts, and for each file part it:
+
+Either writes the file to disk (diskStorage) or collects it into memory (memoryStorage) depending on the storage engine.
+
+Adds metadata to the request object: req.file (single) or req.files (multiple).
+
+Adds text fields to req.body.
+
+Internally multer uses busboy
+ to parse the streaming multipart body.
