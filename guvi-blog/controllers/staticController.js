@@ -1,7 +1,10 @@
-exports.renderHomePage=function(req,res){
-    // console.log(req.user,'dkkkkkkkkkkkkkk')
+const Blog=require("../models/blog")
+
+exports.renderHomePage= async function(req,res){
+    const allBlogs=await Blog.find({}).sort({createdAt:-1});
     return res.render('home',{
         user:req.user,
+        blogs:allBlogs,
     });
 }
 

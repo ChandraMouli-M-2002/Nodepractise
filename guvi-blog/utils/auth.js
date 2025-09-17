@@ -8,6 +8,7 @@ async function generateTokenForUser(id){
     _id:user._id,
     email:user.email,
     userName:user.username,
+    role:user.role,
    };
 
    const token=jwt.sign(payload, JWT_SECRET);

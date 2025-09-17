@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/css/bootstrap') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreateBlog</title>
+</head>
+<body>
+     <%- include('./partials/components/nav') %>
+    <div class="container my-3 ">
+        <% if (locals.user && user.role === 'Admin') { %>
+         <a class="btn btn-danger " href="/blog/delete/<%= blog._id %>">Delete Blog</a>
+        <% } %>
+        <div class="text-center">
+            <img
+              class="card-img-top rounded shadow p-3 mb-5 bg-body"
+              src="/uploads/<%= blog.coverImage %>"
+              alt="Card image"
+              style="width: 60%; height:450px;object-fit: contain;"
+            />
+        </div>
+            <h1 class=" text-center"><%= blog.title %></h1>
+            <p class="my-2"><%= blog.content %></p>
+            <p class="my-2 ">Posted By : <%= blog.CreatedBy.username %></p>
+    </div>
+    <% if (locals.user) { %>
+       <div class="container">
+         <input type="text" id="comment-input" placeholder="Enter Your Comment" class="form-control">
+         <button id="submitButton" type="submit" class="btn btn-success my-2">Post</button>
+       </div>
+    <% } %>
+    <div class="container">
+        <h1>Comments (<%= comments.length %>)</h1>
+        <% comments.forEach(comments => { %>
+            <div>
+                <span class="text-bold"><%= comments.CreatedBy.username %></span> :
+                <span class="text-bold"><%= comments.content %></span>
+
+            </div>
+        <% }) %>
+    </div>
+    <%- include('./partials/js/bootstrap') %>
+    <script>
+        const blogId='<%= blog._id %>';
+        const input=document.getElementById('comment-input');
+        const btn=document.getElementById('submitButton');
+        btn.addEventListener('click',createcomment)
+        function createcomment(){
+            fetch('http://localhost:8000/comment/create',{
+                method:"POST",
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({blogId,content:input.value})
+            }).then(()=> window.location.reload())
+            .catch(error=>console.log(error,'ddddddddddddd'));
+        }
+    </script>
+</body>
+</html>

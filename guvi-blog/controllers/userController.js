@@ -1,4 +1,5 @@
 const User= require('../models/user');
+const Blog= require('../models/blog');
 const {generateTokenForUser}=require('../utils/auth');
 
 
@@ -37,4 +38,13 @@ exports.handleUserSignup =async function(req,res){
     }catch(error){
         res.render('signup',{error})
     }
+}
+
+exports.renderUsersBlog = async function(req,res){
+    if(!req.user) return res.redirect('/login');
+    const blogs=await Blog.find({CreatedBy:req.user._id});
+    return res.render('userblogs',{
+        user:req.user,
+        blogs,
+    })
 }

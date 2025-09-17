@@ -1,14 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Guvi Blog</a>
+    <a class="navbar-brand" href="/">Guvi Blog</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active"  href="/">Home</a>
-        </li>
         <% if (locals.user) { %>
            <li class="nav-item">
           <a class="nav-link" href="/blog/create">Create Blog</a>
@@ -19,6 +16,7 @@
           <%= user.userName %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/user/blogs">My Blogs</a>
           <a class="dropdown-item" href="/user/logout">Logout</a>
         </div>
       </li>

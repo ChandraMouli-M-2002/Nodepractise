@@ -1,6 +1,9 @@
 const express=require('express');
 const router=express.Router();
 const multer=require("multer");
+const{renderCreateBlogPage,createNewBlogPost,renderBlogPostPage,handleDeleteBlog} =require('../controllers/blogController');
+const {onlyGrantAccessTo,ensureAuthticated}=require('../middlewares/auth');
+
 
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -14,14 +17,12 @@ const storage=multer.diskStorage({
 
 const upload=multer({storage})
 
-router.get('/create',function(req,res){
-    res.render('createblog');
-});
+router.get('/create',ensureAuthticated,renderCreateBlogPage);
 
-router.post('/create',upload.single("coverimage"), function(req,res){
-    console.log(req.body);
-    console.log(req.file);
-    return res.render('createblog');
-});
+router.post('/create',ensureAuthticated,upload.single("coverimage"), createNewBlogPost);
+
+router.get('/delete/:id',onlyGrantAccessTo('Admin'),handleDeleteBlog);
+
+router.get('/view/:id',renderBlogPostPage);
 
 module.exports=router;

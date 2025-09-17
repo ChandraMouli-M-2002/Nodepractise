@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser')
 const userRouter= require('./routers/userRoutes');
 const blogRouter= require('./routers/blogRoutes');
 const staticRouter= require('./routers/staticRouter');
+const commentRouter= require('./routers/commentRouter');
 
 const {CheckForToken}=require('./middlewares/auth');
 
@@ -33,6 +34,7 @@ app.use(CheckForToken);
 app.use('/',staticRouter);  
 app.use('/user',userRouter);
 app.use('/blog',blogRouter);
+app.use('/comment',commentRouter);
 
 //Listner
 app.listen(8000,()=> console.log("Server Started at port 8000"));  
